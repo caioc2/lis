@@ -1,0 +1,35 @@
+Changes on the official distribution to compile version 2.1.11 in windows:
+
+1) In lis.h 
+   LIS_DEBUG_FUNC_IN and LIS_DEBUG_FUNC_OUT changed to avoid printing messages
+   in debug mode
+
+2) The original Windows configuration script assumes that if you request MPI 
+   support, that implies using the Intel compiler. That is not our environment 
+   though. The win\configure.bat file was updated to include a new --enable-impimsvc 
+   option that sets the impi variable to 1 but keeps intelc as 0. 
+   The win\Makefile.in file was also updated to include the correct directives
+   for using the MPI library with MSVC.
+   To highlight the changes, the original version 2.1.11 files were commited
+   and (revision 5118) then the changed files were commited again (revision 5119).
+
+3) In lis.h and src/solver
+   Add a new stop criterion: maximum iterations without improvement (-maxiter_noimp, default = 100) 
+   With this addition, the solver can stop early and save computational time when detecting 
+   that the iterations are not improving the residual. It is especially useful for difficult 
+   matrices, where methods can get stuck on a plateau or diverge with inf/nan. 
+   Setting `-maxiter_noimp 0`  disables this feature. For now, it is only available for 
+   double precision.
+
+
+4) Windows ONLY - NOT a distribution change:
+   LIS depends on "Win32.Mak" originally found on the Windows 7.1A SDK. 
+   It contains several definitions that are used by the LIS makefile. 
+
+   On MSVC 2022 it could be installed by the optional package 
+   "C++ Windows XP support for VS 2017 (v141)", and would be installed on 
+   "C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Include\Win32.Mak".
+
+   Unfortunatelly, newer versions of MSVC2026 don't include that package anymore, 
+   so one needs to manually download/setup the file where LIS can find it.
+
