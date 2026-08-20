@@ -62,7 +62,7 @@ CFLAGS = $(CFLAGS) $(cdebug) $(cvarsmt) -Qiopenmp -Qopenmp-lib:compat
 !else
 CFLAGS = $(CFLAGS) $(cdebug) $(cvarsmt) -Qopenmp -Qopenmp-lib:compat
 !endif
-!else
+!else
 CFLAGS = $(CFLAGS) $(cdebug) $(cvars)
 !endif
 
@@ -154,7 +154,7 @@ MPIRUN = "mpiexec -n 2"
 MPIDIR = "C:\Program Files (x86)\Microsoft SDKs\MPI"
 CFLAGS = $(CFLAGS) -DUSE_MPI -I$(MPIDIR)\Include
 FFLAGS = $(FFLAGS) -DUSE_MPI -I$(MPIDIR)\Include -I$(MPIDIR)\Include\x64
-LDFLAGS = $(LDFLAGS) $(MPIDIR)\Lib\x64\msmpi.lib $(LDFLAGS) $(MPIDIR)\Lib\x64\msmpifec.lib
+LDFLAGS = $(LDFLAGS) $(MPIDIR)\Lib\x64\msmpi.lib $(MPIDIR)\Lib\x64\msmpifec.lib
 MPIRUN = "mpiexec -n 2"
 !endif
 
@@ -162,7 +162,15 @@ MPIRUN = "mpiexec -n 2"
 # Configuration for Intel MPI
 
 !ifdef impi
+!ifndef intelc
+MPIDIR = $(I_MPI_ROOT)
+!if "$(MPIDIR)" == ""
+MPIDIR = C:\Program Files (x86)\Intel\oneAPI\mpi\latest
+!endif
+CFLAGS = $(CFLAGS) -DUSE_MPI -I"$(MPIDIR)\include" -I"$(MPIDIR)\include\mpi"
+LDFLAGS = $(LDFLAGS) "$(MPIDIR)\lib\impi.lib" 
 MPIRUN = "mpiexec -n 2"
+!endif
 !endif
 
 

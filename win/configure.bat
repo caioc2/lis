@@ -38,6 +38,7 @@ rem   Build Options
 @if "%1" == "--enable-msmpi32" goto setmsmpi32
 @if "%1" == "--enable-msmpi64" goto setmsmpi64
 @if "%1" == "--enable-impi" goto setimpi
+@if "%1" == "--enable-impimsvc" goto setimpimsvc
 @if "%1" == "--enable-intelc" goto setintelc
 @if "%1" == "--enable-icllvm" goto seticllvm
 @if "%1" == "--enable-fortran" goto setfortran
@@ -64,7 +65,8 @@ rem   Build Options
 @echo.	--enable-omp		Build with OpenMP library
 @echo.	--enable-msmpi32	Build with 32bit Microsoft MPI library
 @echo.	--enable-msmpi64	Build with 64bit Microsoft MPI library
-@echo.	--enable-impi		Build with Intel MPI library
+@echo.	--enable-impi		Build with Intel MPI library and Intel compiler
+@echo.	--enable-impimsvc	Build with Intel MPI library and MSVC compiler
 @echo.	--enable-intelc		Use Intel C Compiler
 @echo.	--enable-icllvm		Use Intel LLVM C Compiler
 @echo.	--enable-fortran	Enable Fortran interface
@@ -122,6 +124,12 @@ rem   Build Options
 
 @set impi=1
 @set intelc=1
+@shift
+@goto again
+
+:setimpimsvc
+
+@set impi=1
 @shift
 @goto again
 
