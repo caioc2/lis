@@ -130,8 +130,8 @@ LIS_INT lis_orthomin(LIS_SOLVER solver)
 	LIS_VECTOR r,rtld,*p,*ap,*aptld;
 	LIS_SCALAR *dotsave;
 	LIS_SCALAR alpha, beta;
-	LIS_REAL bnrm2, nrm2, tol;
-	LIS_INT iter,maxiter,output,conv;
+	LIS_REAL bnrm2, nrm2, tol, min_nrm2;
+	LIS_INT iter,maxiter,output,conv,maxiter_noimp,noimp_count;
 	double time,ptime;
 
 	LIS_INT m,l,lmax,ip,ip0;
@@ -147,6 +147,9 @@ LIS_INT lis_orthomin(LIS_SOLVER solver)
 	output  = solver->options[LIS_OPTIONS_OUTPUT];
 	m       = solver->options[LIS_OPTIONS_RESTART];
 	conv    = solver->options[LIS_OPTIONS_CONV_COND];
+	maxiter_noimp = solver->options[LIS_OPTIONS_MAXITER_NO_IMP];
+	noimp_count   = 0;
+	min_nrm2      = LIS_SCALAR_MAX;
 	ptime   = 0.0;
 
 	r       = solver->work[0];
@@ -236,6 +239,24 @@ LIS_INT lis_orthomin(LIS_SOLVER solver)
 			lis_free(dotsave);
 			LIS_DEBUG_FUNC_OUT;
 			return LIS_SUCCESS;
+		}
+
+		if ( maxiter_noimp )
+		{
+			if ( min_nrm2 > nrm2 )
+			{
+				min_nrm2 = nrm2;
+				noimp_count = 0;
+			}
+			else if ( ++noimp_count > maxiter_noimp )
+			{
+				solver->retcode = LIS_MAXITER;
+				solver->iter = iter;
+				solver->resid = nrm2;
+				solver->ptime = ptime;
+				LIS_DEBUG_FUNC_OUT;
+				return LIS_MAXITER;
+			}
 		}
 
 		iter++;

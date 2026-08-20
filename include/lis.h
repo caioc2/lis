@@ -67,7 +67,7 @@ extern "C" {
 #define LIS_BINARY_LITTLE 1
 
 
-#define LIS_OPTIONS_LEN 27
+#define LIS_OPTIONS_LEN 28
 #define LIS_OPTIONS_SOLVER 0
 #define LIS_OPTIONS_PRECON 1
 #define LIS_OPTIONS_MAXITER 2
@@ -95,6 +95,7 @@ extern "C" {
 #define LIS_OPTIONS_CONV_COND 24
 #define LIS_OPTIONS_INIT_SHADOW_RESID 25
 #define LIS_OPTIONS_IDRS_RESTART 26
+#define LIS_OPTIONS_MAXITER_NO_IMP 27
 
 #define LIS_EOPTIONS_LEN 13
 #define LIS_EOPTIONS_ESOLVER 0
@@ -284,8 +285,10 @@ extern "C" {
 
 
 #if defined(_DEBUG)
-#define LIS_DEBUG_FUNC_IN lis_debug_trace_func(1,__FUNC__)
-#define LIS_DEBUG_FUNC_OUT lis_debug_trace_func(0,__FUNC__)
+//#define LIS_DEBUG_FUNC_IN lis_debug_trace_func(1,__FUNC__)
+//#define LIS_DEBUG_FUNC_OUT lis_debug_trace_func(0,__FUNC__)
+#define LIS_DEBUG_FUNC_IN
+#define LIS_DEBUG_FUNC_OUT
 #else
 #define LIS_DEBUG_FUNC_IN
 #define LIS_DEBUG_FUNC_OUT
@@ -1082,6 +1085,8 @@ extern "C"
 		(is) = (id)*(ie)<((n)+1)?(id)*(ie):(n)+1; \
 		(ie) = (is)+(ie)-1<(n)?(is)+(ie)-1:(n);
 #endif
+
+#define LIS_SCALAR_MAX 1.7976931348623158e+308
 
 #ifdef __cplusplus
 }

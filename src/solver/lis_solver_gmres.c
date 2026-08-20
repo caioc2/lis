@@ -142,8 +142,8 @@ LIS_INT lis_gmres(LIS_SOLVER solver)
 	LIS_SCALAR aa,bb,rr,a2,b2;
 	LIS_SCALAR t;
 
-	LIS_REAL bnrm2,nrm2,tol;
-	LIS_INT iter,maxiter,n,output;
+	LIS_REAL bnrm2,nrm2,tol,min_nrm2;
+	LIS_INT iter,maxiter,n,output,maxiter_noimp,noimp_count;
 	double time,ptime;
 
 	LIS_REAL rnorm;
@@ -163,6 +163,9 @@ LIS_INT lis_gmres(LIS_SOLVER solver)
 	maxiter = solver->options[LIS_OPTIONS_MAXITER];
 	output  = solver->options[LIS_OPTIONS_OUTPUT];
 	m       = solver->options[LIS_OPTIONS_RESTART];
+	maxiter_noimp = solver->options[LIS_OPTIONS_MAXITER_NO_IMP];
+	noimp_count   = 0;
+	min_nrm2      = LIS_SCALAR_MAX;
 	h_dim   = m+1;
 	ptime   = 0.0;
 
@@ -272,6 +275,25 @@ LIS_INT lis_gmres(LIS_SOLVER solver)
 			}
 
 			if( tol >= nrm2 ) break;
+
+			if (maxiter_noimp)
+			{
+				if (min_nrm2 > nrm2)
+				{
+					min_nrm2 = nrm2;
+					noimp_count = 0;
+				}
+				else if (++noimp_count > maxiter_noimp)
+				{
+					solver->retcode = LIS_MAXITER;
+					solver->iter = iter;
+					solver->resid = nrm2;
+					solver->ptime = ptime;
+					LIS_DEBUG_FUNC_OUT;
+					return LIS_MAXITER;
+				}
+			}
+
 		} while( i<m && iter <maxiter );
 
 		/* Solve H * Y = S for upper Hessenberg matrix H */
@@ -1135,8 +1157,8 @@ LIS_INT lis_fgmres(LIS_SOLVER solver)
 	LIS_SCALAR aa,bb,rr,a2,b2;
 	LIS_SCALAR t;
 
-	LIS_REAL bnrm2,nrm2,tol;
-	LIS_INT iter,maxiter,output;
+	LIS_REAL bnrm2,nrm2,tol,min_nrm2;
+	LIS_INT iter,maxiter,output,maxiter_noimp,noimp_count;
 	double time,ptime;
 
 	LIS_REAL rnorm;
@@ -1155,6 +1177,9 @@ LIS_INT lis_fgmres(LIS_SOLVER solver)
 	maxiter = solver->options[LIS_OPTIONS_MAXITER];
 	output  = solver->options[LIS_OPTIONS_OUTPUT];
 	m       = solver->options[LIS_OPTIONS_RESTART];
+	maxiter_noimp = solver->options[LIS_OPTIONS_MAXITER_NO_IMP];
+	noimp_count   = 0;
+	min_nrm2      = LIS_SCALAR_MAX;
 	h_dim   = m+1;
 	ptime   = 0.0;
 
@@ -1257,6 +1282,25 @@ LIS_INT lis_fgmres(LIS_SOLVER solver)
 			}
 
 			if( tol >= nrm2 ) break;
+
+			if (maxiter_noimp)
+			{
+				if (min_nrm2 > nrm2)
+				{
+					min_nrm2 = nrm2;
+					noimp_count = 0;
+				}
+				else if (++noimp_count > maxiter_noimp)
+				{
+					solver->retcode = LIS_MAXITER;
+					solver->iter = iter;
+					solver->resid = nrm2;
+					solver->ptime = ptime;
+					LIS_DEBUG_FUNC_OUT;
+					return LIS_MAXITER;
+				}
+			}
+
 		} while( i<m && iter <maxiter );
 
 		/* Solve H * Y = S for upper Hessenberg matrix H */
