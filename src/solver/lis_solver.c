@@ -478,9 +478,9 @@ LIS_INT lis_solve_kernel(LIS_MATRIX A, LIS_VECTOR b, LIS_VECTOR x, LIS_SOLVER so
 	storage     = solver->options[LIS_OPTIONS_STORAGE];
 	block       = solver->options[LIS_OPTIONS_STORAGE_BLOCK];
 	conv_cond   = solver->options[LIS_OPTIONS_CONV_COND];
+	maxiter_noimp = solver->options[LIS_OPTIONS_MAXITER_NO_IMP];
 	tol         = solver->params[LIS_PARAMS_RESID-LIS_OPTIONS_LEN];
 	tol_w       = solver->params[LIS_PARAMS_RESID_WEIGHT-LIS_OPTIONS_LEN];
-	maxiter_noimp = solver->params[LIS_OPTIONS_MAXITER_NO_IMP];
 	solver->precision = precision;
 
 	if( nsolver < 1 || nsolver > LIS_SOLVERS_LEN )
