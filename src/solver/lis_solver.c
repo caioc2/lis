@@ -268,7 +268,7 @@ LIS_INT lis_solver_init(LIS_SOLVER solver)
 	solver->options[LIS_OPTIONS_CONV_COND]            = 0;
 	solver->options[LIS_OPTIONS_INIT_SHADOW_RESID]    = LIS_RESID;
 	solver->options[LIS_OPTIONS_IDRS_RESTART]         = 2;
-	solver->options[LIS_OPTIONS_MAXITER_NO_IMP]       = 100;
+	solver->options[LIS_OPTIONS_MAXITER_NO_IMP]       = 400;
 
 	solver->params[LIS_PARAMS_RESID        -LIS_OPTIONS_LEN] = 1.0e-12;
 	solver->params[LIS_PARAMS_RESID_WEIGHT -LIS_OPTIONS_LEN] = 1.0;
