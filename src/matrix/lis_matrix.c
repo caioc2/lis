@@ -216,9 +216,9 @@ LIS_INT lis_matrix_create(LIS_Comm comm, LIS_MATRIX *Amat)
 	lis_matrix_init(Amat);
 
 	#ifdef USE_MPI
-#if _DEBUG
-	printf("c_comm = %d f_comm = %d\n",MPI_COMM_WORLD,comm);
-#endif
+// #if _DEBUG
+// 	printf("c_comm = %d f_comm = %d\n",MPI_COMM_WORLD,comm);
+// #endif
 		MPI_Comm_size(comm,&int_nprocs);
 		MPI_Comm_rank(comm,&int_my_rank);
 		nprocs = int_nprocs;

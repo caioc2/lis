@@ -500,7 +500,7 @@ LIS_INT lis_solve_kernel(LIS_MATRIX A, LIS_VECTOR b, LIS_VECTOR x, LIS_SOLVER so
 	}
 	if (maxiter_noimp < 0)
 	{
-		LIS_SETERR1(LIS_ERR_ILL_ARG, "Parameter LIS_OPTIONS_MAXITER_NO_IMP(=%D) is less than 0\n", maxiter_noimp);
+		LIS_SETERR1(LIS_ERR_ILL_ARG, "Option LIS_OPTIONS_MAXITER_NO_IMP(=%D) is less than 0\n", maxiter_noimp);
 		return LIS_ERR_ILL_ARG;
 	}
 	if( conv_cond>0 && lis_solver_execute_conv_cond[nsolver]==NULL )
